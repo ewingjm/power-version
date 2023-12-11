@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
+    <PackageReference Include="SpecFlow.MsTest" Version="3.9.74" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="Microsoft.PowerApps.CLI" Version="1.29.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(PkgMicrosoft_PowerApps_CLI)\tools\**\*.*" CopyToOutputDirectory="PreserveNewest" Visible="False">
+      <Link>pac\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PowerVersion\PowerVersion.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\Override versions with tags.feature.cs">
+      <DependentUpon>Override versions with tags.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Increment versions with commit messages.feature.cs">
+      <DependentUpon>Increment versions with commit messages.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Increment versions with Conventional Commits.feature.cs">
+      <DependentUpon>Increment versions with Conventional Commits.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Version feature branches.feature.cs">
+      <DependentUpon>Version feature branches.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Version release branches.feature.cs">
+      <DependentUpon>Version release branches.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <Target Name="PackPowerVersionNuGet" AfterTargets="Build">
+    <Exec Command="dotnet pack ../../src/PowerVersion.MSBuild/PowerVersion.MSBuild.csproj --include-symbols -o $(OutputPath) -p:SymbolPackageFormat=snupkg -c Debug" />
+  </Target>
+
+</Project>
