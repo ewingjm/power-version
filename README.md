@@ -43,7 +43,7 @@ Install the [PowerVersion.MSBuild](https://www.nuget.org/packages/PowerVersion.M
 
 Simply build the solution project after installing the NuGet package. The outputted solution file will have a version set which has been derived from the Git history. It is recommended to set your solution version in source control to `0.0.0` to ensure that all versioning is handled by Power Version. 
 
-If you are adopting Power Version for an existing solution project, refer to the [Version tags](#version-tags) section for information on overriding version to start the calculation form.
+If you are adopting Power Version for an existing solution project, refer to the [Version tags](#version-tags) section for information on overriding version to start the calculation from.
 
 See below for details on how versions are calculated.
 
@@ -72,6 +72,8 @@ These kinds of commits do **not** automatically increment the solution version a
 - An `<increment>` of `major` or `breaking` is a major increment
 - An `<increment>` of `minor` or `feature` is a minor increment
 - An `<increment>` of `patch` or `fix` is a patch increment
+
+Note that an explicit version increment of this type will take precedence if the same commit also increments the version as a metadata commit.
 
 #### Version tags
 
