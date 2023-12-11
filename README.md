@@ -1,7 +1,5 @@
 # Power Version
 
-Version your Power Apps solutions at build-time using Git.
-
 ## Table of contents
 
 - [Power Version](#power-version)
@@ -28,22 +26,25 @@ Generating a [Semantic Version](https://semver.org/) number from Git history can
 - More than one solution will often be source-controlled in the same repository (e.g. as part of a package)
 - Solution versions do not accept all valid Semantic Versions (e.g. those with suffixes)
 
-This package has been created to solve the above challenges.
+This package has been created to enable Power Apps developer to benefit from the functionality offered by tools like GitVersion while addressing the above challenges.
 
 ## Prerequisites
 
-You must have a .cdsproj solution project created with the Power Apps CLI (e.g. `pac solution init`). You must also be following trunk-based Git workflow similar to what is described in this Microsoft Developer Blogs [post](https://devblogs.microsoft.com/devops/release-flow-how-we-do-branching-on-the-vsts-team/). To summarise:
-
-- Developers branch off and merge into a trunk (e.g. `master` or `main`)
-- Releases are supported using release branches
+- You must have a _.cdsproj_ solution project created with the Power Apps CLI (e.g. `pac solution init`)
+- You must be source-controlling your solution project in a Git repository
+- You must be following trunk-based Git workflow similar to what is described in this Microsoft Developer Blogs [post](https://devblogs.microsoft.com/devops/release-flow-how-we-do-branching-on-the-vsts-team/)
+  - Developers branch off and merge into a trunk (e.g. `master` or `main`)
+  - Releases are supported using release branches
 
 ## Installation
 
-Install the [PowerVersion.MSBuild](https://www.nuget.org/packages/PowerVersion.MSBuild) NuGet package into your solution project (*.cdsproj).
+Install the [PowerVersion.MSBuild](https://www.nuget.org/packages/PowerVersion.MSBuild) NuGet package into your solution project (_.cdsproj_).
 
 ## Usage
 
-Simply build the solution project. The generated solution .zip file will be versioned according to the Git history.
+Simply build the solution project after installing the NuGet package. The outputted solution file will have a version set which has been derived from the Git history. It is recommended to set your solution version in source control to `0.0.0` to ensure that all versioning is handled by Power Version. 
+
+If you are adopting Power Version for an existing solution project, refer to the [Version tags](#version-tags) section for information on overriding version to start the calculation form.
 
 See below for details on how versions are calculated.
 
