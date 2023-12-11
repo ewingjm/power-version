@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Deletes any versions of Power Version in the global packages cache.
+        /// Deletes any versions of PowerVersion in the global packages cache.
         /// </summary>
         [BeforeTestRun(Order = -998)]
         public static void DeleteCachedPowerVersionPackages()

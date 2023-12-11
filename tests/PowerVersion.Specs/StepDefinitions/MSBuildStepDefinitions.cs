@@ -39,9 +39,9 @@ namespace PowerVersion.Specs.StepDefinitions
         }
 
         /// <summary>
-        /// Adds a package reference to the Power Version NuGet package in the solution project.
+        /// Adds a package reference to the PowerVersion NuGet package in the solution project.
         /// </summary>
-        [Given(@"the Power Version NuGet package has been installed")]
+        [Given(@"the PowerVersion NuGet package has been installed")]
         public void GivenThePowerVersionNuGetPackageHasBeenInstalled()
         {
             var projectDirectory = this.scenarioCtx.GetProjectDirectory();
@@ -117,7 +117,7 @@ namespace PowerVersion.Specs.StepDefinitions
         private void CreateNuGetConfig(string projectDirectory, string localFeed)
         {
             var nugetConfigPath = Path.Combine(projectDirectory, "NuGet.config");
-            this.testCtx.WriteLine($"Creating NuGet.config at {nugetConfigPath} to retrieve Power Version NuGet from local feed.");
+            this.testCtx.WriteLine($"Creating NuGet.config at {nugetConfigPath} to retrieve PowerVersion NuGet from local feed.");
 
             File.WriteAllText(
                 nugetConfigPath,

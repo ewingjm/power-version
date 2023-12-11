@@ -3,7 +3,7 @@ Feature: Version feature branches
 Background:
 	Given a Git repository has been initalised
 	And a solution project has been created with the Power Apps CLI
-	And the Power Version NuGet package has been installed
+	And the PowerVersion NuGet package has been installed
 	And the master branch has received 1 or more commits
 	And the currently calculated solution version is known
 
