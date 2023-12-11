@@ -1,5 +1,5 @@
 # Power Version
-
+****
 ## Table of contents
 
 - [Power Version](#power-version)
@@ -21,7 +21,7 @@
 
 ## Introduction
 
-Generating a [Semantic Version](https://semver.org/) number from Git history can often be advantageous. A tool commonly used to do this is [GitVersion](https://gitversion.net/docs/) and, although GitVersion works great in most circumstances, Power Apps solutions pose some unique challenges:
+Generating a [Semantic Version](https://semver.org/) number from Git history can often be advantageous. A tool commonly used to do this is [GitVersion](https://gitversion.net/docs/). GitVersion works great in most scenarios but, unfortunately, Power Apps solutions pose some unique challenges:
 
 - More than one solution will often be source-controlled in the same repository (e.g. as part of a package)
 - Solution versions do not accept all valid Semantic Versions (e.g. those with suffixes)
