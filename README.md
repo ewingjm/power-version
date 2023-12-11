@@ -53,7 +53,7 @@ There are different mechanisms in place to increment a solution version with a c
 
 #### Solution metadata commits
 
-Solution metadata commits are commits that make updates under the solution metadata directory. By default, this is the `src` folder in the project created by the Power Apps ClI with `pac solution init`.
+Solution metadata commits are commits that make updates under the solution metadata directory. By default, this is the `src` folder in the project created by the Power Apps CLI with `pac solution init`.
 
 These kinds of commits will automatically bump the solution version. The kind of bump depends on the commit title and is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
 
