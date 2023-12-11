@@ -37,24 +37,6 @@
     <ProjectReference Include="..\..\src\PowerVersion\PowerVersion.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Features\Override versions with tags.feature.cs">
-      <DependentUpon>Override versions with tags.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Increment versions with commit messages.feature.cs">
-      <DependentUpon>Increment versions with commit messages.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Increment versions with Conventional Commits.feature.cs">
-      <DependentUpon>Increment versions with Conventional Commits.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Version feature branches.feature.cs">
-      <DependentUpon>Version feature branches.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Version release branches.feature.cs">
-      <DependentUpon>Version release branches.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
   <Target Name="PackPowerVersionNuGet" AfterTargets="Build">
     <Exec Command="dotnet pack ../../src/PowerVersion.MSBuild/PowerVersion.MSBuild.csproj --include-symbols -o $(OutputPath) -p:SymbolPackageFormat=snupkg -c Debug" />
   </Target>
