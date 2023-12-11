@@ -1,5 +1,4 @@
-# Power Version
-****
+# Power Version![](./docs/images/logo.svg)
 ## Table of contents
 
 - [Power Version](#power-version)
