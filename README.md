@@ -56,7 +56,7 @@ Simply build the solution project and the outputted solution's version will be s
 
 This section describes the different mechanisms in place to increment the solution version for a commit.
 
-The starting version for the calculation is either the version in the _Solution.xml_ (if no [version tag](#version-tags) is found) or version in the version tag. It is recommended to set the version in the _Solution.xml_ to `0.0.0` to ensure that all versioning is handled by PowerVersion - if have an existing solution project, create a version tag to ensure version calculation is started at the correct version.
+The starting version for the calculation is either the version in the _Solution.xml_ (if no [version tag](#version-tags) is found) or the version in the latest version tag. It is recommended to set the version in the _Solution.xml_ to `0.0.0` to ensure that all versioning is handled by PowerVersion - if have an existing solution project, create a version tag to ensure version calculation is started at the correct version.
 
 #### Metadata commits
 
