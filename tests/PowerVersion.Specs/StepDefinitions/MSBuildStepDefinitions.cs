@@ -52,7 +52,7 @@ namespace PowerVersion.Specs.StepDefinitions
             this.CreateNuGetConfig(projectDirectory, localFeed);
 
             ExecuteDotNetCommand(
-                $"add package PowerVersion.MSBuild --source {localFeed} --no-restore",
+                $"add package PowerVersion.MSBuild --source {localFeed} --no-restore --prerelease",
                 projectDirectory);
         }
 
