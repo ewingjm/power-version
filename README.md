@@ -29,7 +29,7 @@ Generating [Semantic Versions](https://semver.org/)  from Git history is often a
 Power Apps solutions have some unique challenges when applying this approach:
 
 - Multiple solutions often need to be versioned independently within the same repository
-- Solution versions do not conform to the Semantic Versions specification
+- Solution versions do not conform fully to the Semantic Versions specification
 
 **PowerVersion** is designed to address these challenges and provide similar functionality to the tools mentioned above.
 
