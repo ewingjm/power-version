@@ -64,8 +64,8 @@ Metadata commits are commits that make updates under the solution metadata direc
 
 These commits will automatically increment the solution version. The kind of increment depends on the commit message title and is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
 
-- A commit message with an '!' after the Conventional Commits type is a major increment (`refactor!: delete obsolete components`)
-- A commit message with a Conventional Commits type of 'feat' is a minor increment (`feat: create an application`)
+- A commit message with an `!` after the Conventional Commits type is a major increment (`refactor!: delete obsolete components`)
+- A commit message with a Conventional Commits type of `feat` is a minor increment (`feat: create an application`)
 - A commit message containing anything else is a patch increment (`fix: contact form script error`)
 
 #### Non-metadata commits
