@@ -10,12 +10,12 @@ Version your Power Apps solutions at build-time automatically with Git.
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Configuration](#configuration)
     - [Version increments](#version-increments)
       - [Metadata commits](#metadata-commits)
       - [Non-metadata commits](#non-metadata-commits)
       - [Version tags](#version-tags)
     - [Branch types](#branch-types)
+      - [Configuration](#configuration)
       - [Mainline branches](#mainline-branches)
       - [Release branches](#release-branches)
       - [Topic branches](#topic-branches)
@@ -26,24 +26,19 @@ Version your Power Apps solutions at build-time automatically with Git.
 
 Generating [Semantic Versions](https://semver.org/)  from Git history is often a sensible approach to versioning artifacts. It is also made incredibly easy thanks to tools such as [GitVersion](https://github.com/GitTools/GitVersion) and [semantic-release](https://github.com/semantic-release/semantic-release). 
 
-Power Apps solutions, however, pose some unique challenges:
+Power Apps solutions have some unique challenges when applying this approach:
 
 - Multiple solutions often need to be versioned independently within the same repository
 - Solution versions do not conform to the Semantic Versions specification
 
-**PowerVersion** was created to solve these challenges.
+**PowerVersion** is designed to address these challenges and provide similar functionality to the tools mentioned above.
 
 ## Prerequisites
 
 
 - You must have a solution project created with the Power App CLI
 - Your solution project must exist within a Git repository
-
-You must also have a Git workflow similar to the one described in this blog [post](https://devblogs.microsoft.com/devops/release-flow-how-we-do-branching-on-the-vsts-team/). 
-In summary:
-
-  - Developers branch off and merge into a trunk (e.g. `master` or `main`)
-  - Hotfixes are merged to release branches (which branch off the trunk)
+- Your Git workflow must be similar to Microsoft's [Release flow](https://learn.microsoft.com/en-us/devops/develop/how-microsoft-develops-devops#microsoft-release-flow)
 
 ## Installation
 
@@ -57,25 +52,11 @@ dotnet add package PowerVersion.MSBuild
 
 Simply build the solution project and the outputted solution's version will be set by PowerVersion based on the Git history.
 
-### Configuration
-
-There are two MSBuild properties that can be set to configure the versioning behaviour.
-
-```xml
-<PropertyGroup>
-  <MainlineBranch>master</MainlineBranch>
-  <ReleaseBranchPrefix>release/</ReleaseBranchPrefix>
-</PropertyGroup>
-```
-
-See below for details on how versions are calculated differently depending on the branch.
-
 ### Version increments
 
 This section describes the different mechanisms in place to increment the solution version for a commit.
 
 The starting version for the calculation is either the version in the _Solution.xml_ (if no [version tag](#version-tags) is found) or version in the version tag. It is recommended to set the version in the _Solution.xml_ to `0.0.0` to ensure that all versioning is handled by PowerVersion - if have an existing solution project, create a version tag to ensure version calculation is started at the correct version.
-
 
 #### Metadata commits
 
@@ -116,6 +97,17 @@ The version calculation will start at the most recent version tag for the soluti
 ### Branch types
 
 The version calculation differs based on the branch type.
+
+#### Configuration
+
+There are two MSBuild properties that can be set to configure how the branch type is determined for a given branch.
+
+```xml
+<PropertyGroup>
+  <MainlineBranch>master</MainlineBranch>
+  <ReleaseBranchPrefix>release/</ReleaseBranchPrefix>
+</PropertyGroup>
+```
 
 #### Mainline branches
 
