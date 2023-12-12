@@ -72,11 +72,9 @@ These commits will automatically increment the solution version. The kind of inc
 
 Non-metadata commits are commits that don't make any changes under the solution metadata directory but _do_ update files that are mapped into the solution at build-time with the Solution Packager. Typically, these will relate to code components such as web resources and plug-in assemblies. 
 
-These kinds of commits do **not** automatically increment the solution version as it is not possible to determine which solutions have been updated. You must explicitly bump the solution manually using the following in the commit message body. 
+These kinds of commits do **not** automatically increment the solution version as it is not possible to determine which solutions have been updated. You must explicitly bump the solution manually using the following in the commit message body:
 
-```shell
-+semver(<solution-unique-name>): <increment>
-```
+> +semver(\<solution-unique-name\>): \<increment\>
 
 - An `<increment>` of `major` or `breaking` is a major increment
 - An `<increment>` of `minor` or `feature` is a minor increment
@@ -86,11 +84,9 @@ An explicit version increment of this type will take precedence if the same comm
 
 #### Version tags
 
-It's possible to override the version calculated for a given commit using a Git tag. 
+It's possible to override the version calculated for a given commit using a Git tag:
 
-```shell
-<solution-unique-name>/#.#.#
-```
+> \<solution-unique-name\>/#.#.#
 
 The version calculation will start at the most recent version tag for the solution (or the first commit if no tags are found). It is recommended to periodically create a version tag to improve the performance of the version calculation.
 
