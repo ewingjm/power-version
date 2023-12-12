@@ -1,0 +1,9 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <SolutionVersionStrategy>Git</SolutionVersionStrategy>
+    <MainlineBranch>master</MainlineBranch>
+    <ReleaseBranchPrefix>release/</ReleaseBranchPrefix>
+  </PropertyGroup>
+
+</Project>
