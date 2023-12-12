@@ -7,6 +7,8 @@
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <NoWarn>NU5100</NoWarn>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,8 +16,9 @@
     <Authors>Max Ewing</Authors>
     <PackageTags>Power Apps;Power Platform;Dataverse;Versioning;GitHubFlow;GitVersion;SemVer</PackageTags>
     <Description>
-      This NuGet package uses Git history to version Power Apps solution projects (.cdsproj) at build-time.
+      Version your Power Apps solutions automatically using Git.
     </Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -27,8 +30,10 @@
 
   <ItemGroup>
     <None Include="build\**" Pack="True" PackagePath="build\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\docs\images\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
       <PrivateAssets>all</PrivateAssets>

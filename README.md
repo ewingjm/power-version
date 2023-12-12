@@ -1,4 +1,4 @@
-# PowerVersion![](./docs/images/logo.svg)
+# PowerVersion![](https://raw.githubusercontent.com/ewingjm/power-version/main/docs/images/logo.svg)
 
 Version your Power Apps solutions at build-time automatically with Git.
 
