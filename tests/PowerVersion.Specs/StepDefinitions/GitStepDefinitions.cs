@@ -139,7 +139,8 @@ namespace PowerVersion.Specs.StepDefinitions
                 repository.FakeCommit(
                     this.faker,
                     this.scenarioCtx.GetSolutionName(),
-                    title: $"feat!: {this.faker.Lorem.Sentence()}");
+                    title: $"feat!: {this.faker.Lorem.Sentence()}",
+                    solutionCommit: true);
             }
         }
 
