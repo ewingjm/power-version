@@ -81,18 +81,19 @@
 
             try
             {
-                tag = this.ExecuteCommand($"describe --tags --abbrev=0 --match \"{match}\" {reference}");
+                tag = this.ExecuteCommand($"describe --tags --abbrev=7 --match \"{match}\" {reference}");
             }
             catch (Exception ex) when (ex.Message.Contains("fatal: No names found, cannot describe anything."))
             {
                 return null;
             }
 
-            var regexMatch = Regex.Match(tag, $"^(?<tag>.+)(-(?<additionalCommits>\\d+)-g(?<commitHash>.+))?$");
+            var regexMatch = Regex.Match(tag, @"^(?<tag>.+)-(?<additionalCommits>\d+)-g(?<commitHash>.+)$");
 
-            return new GitTag(
-                regexMatch.Groups["tag"].ToString(),
-                regexMatch.Groups["commitHash"].Success ? regexMatch.Groups["commitHash"].ToString() : this.GetCommit().Hash);
+            var tagName = regexMatch.Success ? regexMatch.Groups["tag"].ToString() : tag;
+            var tagCommit = this.ExecuteCommand($"rev-list -n 1 --abbrev-commit {tagName}");
+
+            return new GitTag(tagName, tagCommit);
         }
 
         /// <inheritdoc/>
