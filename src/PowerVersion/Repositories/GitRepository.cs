@@ -54,7 +54,7 @@
         public IEnumerable<GitCommit> GetCommits(string reference = "HEAD", string path = null)
         {
             return JsonSerializer.Deserialize<GitCommit[]>(
-                this.ExecuteArrayCommand($"log {reference} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
+                this.ExecuteArrayCommand($"--no-pager log {reference} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
         }
 
         /// <inheritdoc/>
@@ -71,7 +71,7 @@
             }
 
             return JsonSerializer.Deserialize<GitCommit[]>(
-                this.ExecuteArrayCommand($"log {left}..{right} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
+                this.ExecuteArrayCommand($"--no-pager log {left}..{right} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
         }
 
         /// <inheritdoc/>
