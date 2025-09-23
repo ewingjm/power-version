@@ -141,14 +141,16 @@
                 process.StartInfo.WorkingDirectory = this.path ?? string.Empty;
 
                 process.Start();
+                var output = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
                 {
-                    throw new Exception(process.StandardError.ReadToEnd());
+                    throw new Exception(error);
                 }
 
-                return process.StandardOutput.ReadToEnd().TrimEnd('\n');
+                return output.TrimEnd('\n');
             }
         }
     }
