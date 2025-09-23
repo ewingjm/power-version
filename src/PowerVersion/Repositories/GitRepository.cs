@@ -140,6 +140,7 @@
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.WorkingDirectory = this.path ?? string.Empty;
 
+                process.Start();
                 var output = process.StandardOutput.ReadToEnd();
                 var error = process.StandardError.ReadToEnd();
                 process.WaitForExit();
