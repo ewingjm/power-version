@@ -174,6 +174,63 @@
         }
 
         /// <summary>
+        /// Asserts that commits containing JSON special characters are parsed correctly.
+        /// </summary>
+        /// <param name="subject">The commit subject.</param>
+        /// <param name="body">The commit body.</param>
+        [DataTestMethod]
+        [DataRow("fix: \"quoted\" subject", "body with \"quotes\" and a \\ backslash")]
+        [DataRow("fix: {braces} [brackets]", "}\n{\n},{\"Hash\":\"x\"}")]
+        [DataRow("fix: tab\tsubject", "line 1\r\nline 2\ttabbed\n\nline 4")]
+        [DataRow("fix: \\\"escaped\\\" \\n", "\\u0041 \\\\ /")]
+        public void GetCommits_MessageContainsJsonCharacters_ParsesCommits(string subject, string body)
+        {
+            var first = this.CreateGitCommit(subject, body: body);
+            var second = this.CreateGitCommit(subject, body: body);
+
+            var actualCommits = this.gitRepository.GetCommits().ToArray();
+
+            CollectionAssert.AreEqual(new[] { first, second }, actualCommits);
+            foreach (var commit in actualCommits)
+            {
+                Assert.AreEqual(subject, commit.Subject);
+                Assert.AreEqual(body, commit.Body.TrimEnd('\n'));
+            }
+        }
+
+        /// <summary>
+        /// Asserts that a single commit containing JSON special characters is parsed correctly.
+        /// </summary>
+        [TestMethod]
+        public void GetCommit_MessageContainsJsonCharacters_ParsesCommit()
+        {
+            var expectedCommit = this.CreateGitCommit("fix: \"quoted\" {subject}", body: "body \"with\" \\ chars\r\n}\n{");
+
+            var actualCommit = this.gitRepository.GetCommit();
+
+            Assert.AreEqual(expectedCommit, actualCommit);
+            Assert.AreEqual(expectedCommit.Subject, actualCommit.Subject);
+            Assert.AreEqual(expectedCommit.Body, actualCommit.Body.TrimEnd('\n'));
+        }
+
+        /// <summary>
+        /// Asserts that <see cref="GitRepository.GetMergeBase(string, string)"/> parses a merge base containing JSON special characters.
+        /// </summary>
+        [TestMethod]
+        public void GetMergeBase_MessageContainsJsonCharacters_ParsesCommit()
+        {
+            var left = this.SwitchToGitBranch();
+            var expectedMergeBase = this.CreateGitCommit("fix: \"quoted\" subject", body: "body \\ \"with\" chars");
+            var right = this.SwitchToGitBranch();
+            this.CreateGitCommit();
+
+            var actualMergeBase = this.gitRepository.GetMergeBase(left, right);
+
+            Assert.AreEqual(expectedMergeBase, actualMergeBase);
+            Assert.AreEqual(expectedMergeBase.Subject, actualMergeBase.Subject);
+        }
+
+        /// <summary>
         /// Asserts that <see cref="GitRepository.GetBranchesWithTag(string)"/> returns a collection of branches that contain a given tag.
         /// </summary>
         [TestMethod]
@@ -269,7 +326,7 @@
             this.ExecuteGitCommand("init");
         }
 
-        private GitCommit CreateGitCommit(string subject = null, string path = ".")
+        private GitCommit CreateGitCommit(string subject = null, string path = ".", string body = null)
         {
             var tempFile = Path.GetTempFileName();
             var fileDirectory = Path.Combine(this.repositoryPath, path);
@@ -282,10 +339,20 @@
 
             subject = subject ?? this.faker.Lorem.Sentence();
 
-            this.ExecuteGitCommand("add .");
-            this.ExecuteGitCommand($"commit -m \"{subject}\"");
+            var messageFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            File.WriteAllText(messageFile, body == null ? subject : $"{subject}\n\n{body}");
 
-            return new GitCommit(this.ExecuteGitCommand("rev-parse --short HEAD"), subject, null);
+            try
+            {
+                this.ExecuteGitCommand("add .");
+                this.ExecuteGitCommand($"commit --cleanup=verbatim -F \"{messageFile}\"");
+            }
+            finally
+            {
+                File.Delete(messageFile);
+            }
+
+            return new GitCommit(this.ExecuteGitCommand("rev-parse --short HEAD"), subject, body);
         }
 
         private string ExecuteGitCommand(string command)

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Text.Json;
     using System.Text.RegularExpressions;
     using PowerVersion.Core.Interfaces;
     using PowerVersion.Core.Models;
@@ -14,6 +13,12 @@
     /// </summary>
     public class GitRepository : IGitRepository
     {
+        private const char FieldSeparator = '\u001f';
+        private const char RecordSeparator = '\u001e';
+
+        // Control-character separators cannot appear in commit messages, so no escaping is required.
+        private const string CommitFormat = "%h%x1f%s%x1f%b%x1e";
+
         private readonly string path;
 
         /// <summary>
@@ -46,15 +51,13 @@
         /// <inheritdoc/>
         public GitCommit GetCommit(string reference = "HEAD")
         {
-            return JsonSerializer.Deserialize<GitCommit>(
-                this.ExecuteJsonCommand($"log -1 {reference} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit").Replace("\n", "\\n"));
+            return ParseCommits(this.ExecuteCommand($"log -1 {reference} --pretty=format:{CommitFormat} --no-abbrev-commit")).Single();
         }
 
         /// <inheritdoc/>
         public IEnumerable<GitCommit> GetCommits(string reference = "HEAD", string path = null)
         {
-            return JsonSerializer.Deserialize<GitCommit[]>(
-                this.ExecuteArrayCommand($"--no-pager log {reference} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
+            return ParseCommits(this.ExecuteCommand($"--no-pager log {reference} --pretty=format:{CommitFormat} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
         }
 
         /// <inheritdoc/>
@@ -70,8 +73,7 @@
                 throw new ArgumentException($"'{nameof(right)}' cannot be null or empty.", nameof(right));
             }
 
-            return JsonSerializer.Deserialize<GitCommit[]>(
-                this.ExecuteArrayCommand($"--no-pager log {left}..{right} --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
+            return ParseCommits(this.ExecuteCommand($"--no-pager log {left}..{right} --pretty=format:{CommitFormat} --no-abbrev-commit --reverse {(path != null ? $"-- {path}" : string.Empty)}"));
         }
 
         /// <inheritdoc/>
@@ -101,8 +103,7 @@
         {
             var mergeBase = this.ExecuteCommand($"merge-base {left} {right}");
 
-            return JsonSerializer.Deserialize<GitCommit>(
-                this.ExecuteJsonCommand($"show --quiet --pretty=format:{{\\\"Hash\\\":\\\"%h\\\",\\\"Subject\\\":\\\"%s\\\",\\\"Body\\\":\\\"%b\\\"}} {mergeBase}"));
+            return ParseCommits(this.ExecuteCommand($"show --quiet --pretty=format:{CommitFormat} {mergeBase}")).Single();
         }
 
         /// <inheritdoc/>
@@ -113,14 +114,19 @@
                 .Select(s => s.Substring(2));
         }
 
-        private string ExecuteArrayCommand(string command)
+        private static IEnumerable<GitCommit> ParseCommits(string output)
         {
-            return $"[{Regex.Replace(this.ExecuteJsonCommand(command), "}\\\\n{", "},\n{")}]";
-        }
+            return output
+                .Split(new[] { RecordSeparator }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(record => record.TrimStart('\r', '\n'))
+                .Where(record => record.Length > 0)
+                .Select(record =>
+                {
+                    var fields = record.Split(new[] { FieldSeparator }, 3);
 
-        private string ExecuteJsonCommand(string command)
-        {
-            return this.ExecuteCommand(command).Replace("\n", "\\n");
+                    return new GitCommit(fields[0], fields[1], fields[2]);
+                })
+                .ToList();
         }
 
         private string ExecuteCommand(string command)
