@@ -64,6 +64,13 @@ namespace PowerVersion.Specs.StepDefinitions
 
             Repository.Init(repoDirectory.FullName);
 
+            using (var repository = new Repository(repoDirectory.FullName))
+            {
+                // Ensure a consistent initial branch name regardless of the local Git
+                // installation's `init.defaultBranch` configuration (e.g. "main" vs "master").
+                repository.Refs.UpdateTarget("HEAD", "refs/heads/master");
+            }
+
             this.testCtx.WriteLine($"Created a Git repository at {repoDirectory.FullName}");
 
             this.scenarioCtx.Add(
