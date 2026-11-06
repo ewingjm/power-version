@@ -1,6 +1,5 @@
 ﻿namespace PowerVersion.Core.Models
 {
-    using System.Text.Json.Serialization;
 
     /// <summary>
     /// A Git tag.
@@ -12,7 +11,6 @@
         /// </summary>
         /// <param name="name">The name of the tag.</param>
         /// <param name="commitHash">The hash of the commit.</param>
-        [JsonConstructor]
         public GitTag(string name, string commitHash)
         {
             if (string.IsNullOrEmpty(name))

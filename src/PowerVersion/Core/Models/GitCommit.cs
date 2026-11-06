@@ -1,7 +1,6 @@
 ﻿namespace PowerVersion.Core.Models
 {
     using System;
-    using System.Text.Json.Serialization;
 
     /// <summary>
     /// A Git commit.
@@ -14,7 +13,6 @@
         /// <param name="hash">The commit hash.</param>
         /// <param name="subject">The commit subject.</param>
         /// <param name="body">The commit body.</param>
-        [JsonConstructor]
         public GitCommit(string hash, string subject, string body)
         {
             if (string.IsNullOrEmpty(hash))
